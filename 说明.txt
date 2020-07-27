@@ -1,0 +1,5 @@
+数据库配置在	src/main/resources/application.yml
+
+刚进可能会很卡
+
+可以在浏览器上输入	ayumi.top  直接访问项目
