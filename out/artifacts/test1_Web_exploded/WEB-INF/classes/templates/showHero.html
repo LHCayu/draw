@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #insertHero{ width: 100%; height: 100%; font-size: 17px}
+        #pagebt button{ margin: 5px}
+    </style>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var id=null;
+            var name=null;
+            var editValue=null;
+            var insertValue=null;
+            var start=0;
+
+            $(".myTr td").click(function(){
+                var tdSeq = $(this).parent().find("td").index($(this)[0]) + 1;
+                var trSeq = $(this).parent().parent().find("tr").index($(this).parent()[0]);
+                id=$("tr:eq("+trSeq+")>td:eq(0)").text()
+                name=$("tr:eq("+trSeq+")>td:eq(1)").text()
+                // alert(tdSeq)
+                if (tdSeq == 3) {
+                    // alert("aaa")
+                    $("#hiddenUpdate").click();
+                    // alert($("tr:eq("+trSeq+")>td:eq(1)").text())
+                }
+                if (tdSeq == 4) {
+                    // alert("bbb")
+                    $("#hiddenDelete").click();
+                }
+            });
+
+            $("#editDetermine").click(function () {
+                editValue=$("#edit").val();
+                window.location.href = "/updateHero?id=" + id + "&name=" + editValue;
+            });
+
+            $("#insertDetermine").click(function () {
+                insertValue=$("#insertText").val();
+                window.location.href = "/insertHero?name=" + insertValue;
+            });
+
+            $("#deleteDetermine").click(function () {
+                window.location.href = "/deleteHero?id=" + id;
+            })
+
+        })
+    </script>
+</head>
+<body>
+<table class="table-striped" align="center" border="1" cellspacing="0">
+    <tr align="center">
+        <td>id</td>
+        <td>name</td>
+        <td colspan="2">操作</td>
+    </tr>
+    <tr th:each="hero : ${hb}" align="center" class="myTr">
+        <td th:text="${hero.id}"></td>
+        <td th:text="${hero.name}"></td>
+        <!--<td><a th:href="@{/updateHero(id=${hero.id},name=${hero.name})}">编辑</a></td>-->
+        <td><button class="f">编辑</button></td>
+        <td><button class="l">删除</button></td>
+    </tr>
+    <button id="hiddenUpdate" data-toggle="modal" data-target="#editModal" hidden></button>
+    <button id="hiddenDelete" data-toggle="modal" data-target="#deleteModal" hidden></button>
+    <tr>
+        <td colspan="4" align="center"><button id="insertHero" class="f" data-toggle="modal" data-target="#insertModal">新增</button></td>
+    </tr>
+</table><p></p>
+<div align="center" id="pagebt">
+    <button><a th:href="@{/showHero(start=0)}">首页</a></button>
+    <span th:switch="${firstPage}">
+        <button th:case="1"><a th:href="@{/showHero(start=${start}-5)}">上一页</a></button>
+        <button th:case="0"><a th:href="@{/showHero(start=${start})}">上一页</a></button>
+    </span>
+    <span th:switch="${pageLimit}">
+        <button th:case="1"><a th:href="@{/showHero(start=${start}+5)}">下一页</a></button>
+        <button th:case="0"><a th:href="@{/showHero(start=${start})}">下一页</a></button>
+    </span>
+    <button><a th:href="@{/showHero(start=${lastPage}*5)}">尾页</a></button>
+</div>
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">修改数据</h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">编辑你想修改的数据<br><input id="edit" type="text"/></div>
+            <div class="modal-footer">
+                <button id="editDetermine" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="insertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">添加数据</h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">编辑你想添加的数据<br><input id="insertText" type="text"/></div>
+            <div class="modal-footer">
+                <button id="insertDetermine" type="button" class="btn btn-primary" data-dismiss="modal">添加</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">删除数据</h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body"><h5>您真的需要删吗？</h5></div>
+            <div class="modal-footer">
+                <button id="deleteDetermine" type="button" class="btn warning" data-dismiss="modal">删除</button>
+                <button type="button" class="btn secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        th,h1,h2,#info{ text-align: center}
+        .ttop{ text-align: right;font-size: 25px}
+        button{font-size: 15px}
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#editDetermine").click(function () {
+                var editUser=$("#editUser").val();
+                var editPhone=$("#editPhone").val();
+                var editAddress=$("#editAddress").val();
+                window.location.href = "/addAddress?editUser=" + editUser + "&editPhone=" + editPhone + "&editAddress=" + editAddress;
+            });
+            $("#back").click(function () {
+                window.location.href = "/backLogin";
+            });
+
+            $("#submitOrder").click(function () {
+                window.location.href = "/submitOrder";
+            });
+
+            $("#backIndex").click(function () {
+                window.location.href = "/backIndex";
+            });
+
+            $("#backLogin").click(function () {
+                window.location.href = "/backLogin";
+            });
+        })
+    </script>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td rowspan="3" width="33%"></td>
+        <td rowspan="3" width="33%"><h1 id="backIndex">简易商城</h1></td>
+        <td th:if="${session.userName} eq null" class="ttop" width="33%" id="backLogin">请登录</td>
+        <td th:if="${session.userName} ne null" class="ttop" width="33%">
+            用户：<a href="/userScreen" th:text="${session.userName}"></a><br>
+            <button class="f" id="back">退出登录</button><br>
+            <button class="l" id="submitOrder">购物车</button>
+        </td>
+    </tr>
+    </thead>
+</table>
+<p><h2>用户信息</h2></p><br><br>
+<table class="table table-striped" id="info">
+    <tr><td>id：</td><td th:text="${userBean.id}"></td></tr>
+    <tr><td>用户名：</td><td th:text="${userBean.name}"></td></tr>
+    <tr><td>性别：</td><td th:text="${userBean.gender}"></td></tr>
+    <tr><td>邮箱：</td><td th:text="${userBean.email}"></td></tr>
+    <tr><td>电话：</td><td th:text="${userBean.telephone}"></td></tr>
+    <tr><td>简介：</td><td th:text="${userBean.introduce}"></td></tr>
+    <tr><td>注册时间：</td><td th:text="${userBean.registerTime}"></td></tr>
+</table>
+<br><br><br>
+<h2>地址管理</h2>
+<div align="center"><button class="f"  id="hiddenUpdate" data-toggle="modal" data-target="#editModal">添加</button></div>
+<br><br>
+<table class="table table-striped" id="address">
+    <thead>
+        <tr>
+            <th>收货人</th>
+            <th>收货电话</th>
+            <th>收货地址</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="receiver:${userAddress}" align="center" class="myTr">
+        <td th:text="${receiver.id}"></td>
+        <td th:text="${receiver.receiverName}"></td>
+        <td th:text="${receiver.receiverPhone}"></td>
+        <td th:text="${receiver.receiverAddress}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">添加地址</h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">收货人：<input id="editUser" type="text"/></div>
+            <div class="modal-body">收货电话：<input id="editPhone" type="text"/></div>
+            <div class="modal-body">收货地址：<input id="editAddress" type="text"/></div>
+            <div class="modal-footer">
+                <button id="editDetermine" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

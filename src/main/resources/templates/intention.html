@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        th,h1{ text-align: center}
+        .ttop{ text-align: right;font-size: 25px}
+        button{font-size: 15px}
+    </style>
+    <script>
+        $(document).ready(function () {
+
+            // 打印提示的信息
+            if ($("#result").text() != "") {
+                alert($("#result").text());
+            }
+
+            // 返回主页
+            $("#back").click(function () {
+                window.location.href = "/draw";
+            });
+        });
+    </script>
+</head>
+<body>
+<b id="result" th:text="${result}"></b>
+
+<!--页面的头部信息-->
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td rowspan="3" width="33%">点击用户名进入个人中心<br>点击我的奖品返回主页</td>
+        <td rowspan="3" width="33%"><h1 id="index">喜力抽奖活动</h1></td>
+        <td th:if="${session.userName} eq null" class="ttop" width="33%" id="backLogin">请登录</td>
+        <td th:if="${session.userName} ne null" class="ttop" width="33%">
+            用户：<a href="/drawUserInfo" th:text="${session.userName}"></a><br>
+            <button class="f" id="back">返回主页</button><br>
+        </td>
+    </tr>
+    </thead>
+</table>
+
+<!--意向的表单-->
+<div align="center">
+    <h2>赠送礼品意向收集</h2>
+    <form action="/intentionSubmit">
+        <p></p>
+        <label>1、(必选)、以下礼品您比较倾向于(多选，可选两个答案)</label><br>
+        <input type="checkbox" name="checkbox1" value="手机"/>手机
+        <input type="checkbox" name="checkbox1" value="平板"/>平板
+        <p></p>
+        <label>2、(必选)、以下礼品您比较倾向于(多选，可选两个答案)</label><br>
+        <input type="checkbox" name="checkbox2" value="滤水壶"/>滤水壶
+        <input type="checkbox" name="checkbox2" value="移动电源"/>移动电源
+        <p></p>
+        3、自行填写，您希望获得什么礼品<br>
+        <input type="text" name="divGifts"><br>
+        <button id="checkSubmit" type="submit">提交</button>
+    </form>
+</div>
+</body>
+</html>

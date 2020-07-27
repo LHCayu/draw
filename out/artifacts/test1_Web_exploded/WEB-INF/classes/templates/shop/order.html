@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        th,h1,h2{ text-align: center}
+        .ttop,#orderSum{ text-align: right;font-size: 25px}
+        button{font-size: 15px}
+        .addressLeft{ width: 50%;text-align: right;}
+        .addressRight{ width: 50%;text-align: left;}
+    </style>
+    <script>
+        $(document).ready(function () {
+            var id,name, price,num,receiverId;
+            $("#editDetermine").click(function () {
+                num=$("#edit").val();
+                if (editValue == "") {
+                    alert("请输入数字！");
+                } else {
+                    window.location.href = "/updateOrder?id=" + id + "&num=" + num;
+                }
+            });
+            $("#back").click(function () {
+                window.location.href = "/backLogin";
+            })
+
+            $(".myTr").click(function () {
+                id=$(this).children('.tdId').text();
+                name=$(this).children('.tdName').text();
+                price=$(this).children('.tdPrice').text();
+                num=$(this).children('.tdNum').text();
+                $("#dialogInfo").html("您选择的<br/>产品：" + name + "<br/>价格：" + price + "<br/>数量：" + num);
+                $("#hiddenUpdate").click();
+                // }
+            });
+
+
+            $("#orderAddress").click(function () {
+                $("#hiddenUpdateAddress").click();
+            });
+
+            //AllAddressList
+            $(".AllAddressList").click(function () {
+                $(".AllAddressList").css("background-color","#fff");
+                receiverId=$(this).children('.receiverId').text();
+                var receiverName=$(this).children('.receiverName').text();
+                var receiverPhone=$(this).children('.receiverPhone').text();
+                var receiverAddress=$(this).children('.receiverAddress').text();
+                // $(this).children('.receiverRadio').attr('checked', 'checked');
+                // $($(this).children('.receiverRadio  input').attr('checked', 'checked');
+                // var a=$(this).children('.receiverRadio').val();
+                // $("td:radio[name='AddressRadio'][value='" + receiverId + "']").prop("checked", "checked");
+                // $("option[value = '"+receiverName+"']").attr("checked","true");
+                $(this).css("background-color","#66ccff");
+                // alert(receiverId)
+            });
+
+            $("#editAddressButton").click(function () {
+                window.location.href = "/selAddress?id=" + receiverId;
+            });
+
+            $("#submitOrder").click(function () {
+                window.location.href = "/submitOrder";
+            });
+
+            $("#backIndex").click(function () {
+                window.location.href = "/backIndex";
+            });
+
+            $("#backLogin").click(function () {
+                window.location.href = "/backLogin";
+            });
+        })
+    </script>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td rowspan="3" width="33%"></td>
+        <td rowspan="3" width="33%"><h1 id="backIndex">简易商城</h1></td>
+        <td th:if="${session.userName} eq null" class="ttop" width="33%" id="backLogin">请登录</td>
+        <td th:if="${session.userName} ne null" class="ttop" width="33%">
+            用户：<a href="/userScreen" th:text="${session.userName}"></a><br>
+            <button class="f" id="back">退出登录</button><br>
+            <button class="l" id="submitOrder">购物车</button>
+        </td>
+    </tr>
+    </thead>
+</table>
+<h1>订单</h1>
+<table class="table table-striped" id="products">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>名称</th>
+        <th>价格</th>
+        <th>数量</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderItems:${orderItemsBeans}" th:if="${orderItems.buynum} ne 0" align="center" class="myTr">
+        <td class="tdId" th:text="${orderItems.product_id}"></td>
+        <td class="tdName" th:text="${orderItems.name}"></td>
+        <td class="tdPrice" th:text="${orderItems.price}"></td>
+        <td class="tdNum" th:text="${orderItems.buynum}"></td>
+    </tr>
+    <button id="hiddenUpdate" data-toggle="modal" data-target="#editModal" hidden></button>
+    <button id="hiddenUpdateAddress" data-toggle="modal" data-target="#editAddress" hidden></button>
+    </tbody>
+</table>
+<p>
+<table class="table table-striped" id="orderSum">
+    <thead>
+    <tr>
+        <td><b>总计：</b><b th:text="${orderItemsSum}"></b></td>
+    </tr>
+    </thead>
+</table>
+</p>
+<p>
+    <h2>收货信息</h2>
+    <div align="center">
+        <table class="table table-striped" id="orderAddress">
+            <tbody th:if="${defaultAddress} ne null">
+                <tr>
+                    <td class="addressLeft">收货人：</td>
+                    <td class="addressRight" th:text="${defaultAddress.receiverName}"></td>
+                </tr>
+                <tr>
+                    <td class="addressLeft">收货电话：</td>
+                    <td class="addressRight" th:text="${defaultAddress.receiverPhone}"></td>
+                </tr>
+                <tr>
+                    <td class="addressLeft">收货地址：</td>
+                    <td class="addressRight" th:text="${defaultAddress.receiverAddress}"></td>
+                </tr>
+            </tbody>
+            <tbody th:if="${defaultAddress} eq null">
+                <td align="center"><b>未设置收货信息</b></td>
+            </tbody>
+        </table>
+    </div>
+</p>
+
+
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h3 class="modal-title" id="dialogInfo">
+
+                </h3>
+            </div>
+            <div class="modal-body">修改数量<br><input id="edit" type="text"/></div>
+            <div class="modal-footer">
+                <button id="editDetermine" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editAddress">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h3 class="modal-title" id="AddressInfo">
+                    修改地址
+                </h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tbody>
+                    <label>
+                        <tr th:each="receiver:${showAllAddress}"  class="AllAddressList">
+                            <td class="receiverId" th:text="${receiver.id}" hidden></td>
+                            <td class="receiverName" th:text="${receiver.receiverName}"></td>
+                            <td class="receiverPhone" th:text="${receiver.receiverPhone}"></td>
+                            <td class="receiverAddress" th:text="${receiver.receiverAddress}"></td>
+                        </tr>
+                    </label>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="editAddressButton" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商城</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        th,h1{ text-align: center}
+        .ttop{ text-align: right;font-size: 25px}
+        button{font-size: 15px}
+    </style>
+    <script>
+        $(document).ready(function () {
+            var id,name, price,tdButton,editValue,screenDefult,sortDefult;
+            $(".myTr").click(function () {
+                // var tdSeq = $("#products").parent().find("td").index($(this)[0]) + 1;
+                // var trSeq = $("#products").parent().parent().find("tr").index($(this).parent()[0]);
+                id=$(this).children('.tdId').text();
+                name=$(this).children('.tdName').text();
+                price=$(this).children('.tdPrice').text();
+                // tdButton=$(this).children('.tdButton').text();
+                // alert($(this).parent().parent().find("tr").index($(this).parent()[0]));
+                // alert(id+" "+name + " " + price);
+                // if ($(this).children('.tdButton').attr('checked')) {
+                //     alert(id+" "+name + " " + price);
+                $("#dialogInfo").html("您选择的<br/>产品为："+name+"<br/>价格为："+price);
+                $("#hiddenUpdate").click();
+                // }
+            });
+            // $(".tdButton").click(function () {
+            //     var i=$(this).index().text();
+            //     alert(i)
+            //     alert(id+" "+name + " " + price);
+            // })
+            $("#editDetermine").click(function () {
+                editValue=$("#edit").val();
+                if (editValue == "") {
+                    alert("请输入数字!");
+                } else {
+                    window.location.href = "/editNums?id=" + id + "&num=" + editValue;
+                }
+            });
+
+            $("#screen").change(function () {
+                var screenValue = $("#screen").val();
+                window.location.href = "/screenIndexProducts?screenValue=" + screenValue;
+            });
+
+            $("#sort").change(function () {
+                var sortValue = $("#sort").val();
+                window.location.href = "/sortIndexProducts?sortValue=" + sortValue;
+            });
+
+            screenDefult=$("#screenDefult").text();
+            $("#screen").find("option[value = '"+screenDefult+"']").attr("selected","selected");
+
+            sortDefult=$("#sortDefult").text();
+            $("#sort").find("option[value = '"+sortDefult+"']").attr("selected","selected");
+
+            $("#qdl").click(function () {
+                window.location.href = "/userScreen";
+            });
+
+            $("#submitOrder").click(function () {
+                window.location.href = "/submitOrder";
+            });
+
+            $("#backLogin").click(function () {
+                window.location.href = "/backLogin";
+            });
+
+            // var alertNums = $("#alertNums").text();
+            // if (alertNums == "1") {
+            //     alert("您已经将该物品置于购物车\n请前往购物车页面修改您需要购买的数量");
+            // }
+        })
+    </script>
+</head>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td rowspan="3" width="33%"></td>
+        <td rowspan="3" width="33%"><h1>简易商城</h1></td>
+        <td th:if="${session.userName} eq null" class="ttop" width="33%" id="backLogin">请登录</td>
+        <td th:if="${session.userName} ne null" class="ttop" width="33%">
+            用户：<a href="/userScreen" th:text="${session.userName}"></a><br><br>
+        </td>
+    </tr>
+    </thead>
+</table>
+<body>
+<a th:text="${session.screenValue}" id="screenDefult" hidden></a>
+<a th:text="${session.sortnValue}" id="sortDefult" hidden></a>
+<!--<a th:text="${alertNums}" id="alertNums" hidden></a>-->
+
+<!--<a th:if="${session.userName} eq null">请登录</a>-->
+<!--<a th:if="${session.userName} ne null">请登录</a>-->
+<table class="table table-striped" id="products">
+    <thead>
+    <tr>
+        <th>
+            筛选：
+            <select class="selectpicker" id="screen">
+                <option value="全部商品">全部商品</option>
+                <option value="学习书籍">学习书籍</option>
+                <option value="电子产品">电子产品</option>
+                <option value="网络小说">网络小说</option>
+            </select>
+        </th>
+
+        <th>
+            排序
+            <select class="selectpicker" id="sort">
+                <option value="编号">编号</option>
+                <option value="名称">名称</option>
+                <option value="价格低->高">价格低->高</option>
+                <option value="价格高->低">价格高->低</option>
+            </select>
+        </th>
+
+        <th colspan="2">
+            <button class="l" id="submitOrder">购物车</button>
+        </th>
+
+    </tr>
+    </thead>
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>名称</th>
+        <th>价格</th>
+        <!--<th>操作</th>-->
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="product:${products}" align="center" class="myTr">
+            <td class="tdId" th:text="${product.id}"></td>
+            <td class="tdName" th:text="${product.name}"></td>
+            <td class="tdPrice" th:text="${product.price}"></td>
+            <!--<td class="tdButton"><button class="f">添加</button></td>-->
+        </tr>
+        <button id="hiddenUpdate" data-toggle="modal" data-target="#editModal" hidden></button>
+    </tbody>
+</table>
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="dialogInfo">
+
+                </h3>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">输入你想购买的数量<br><input id="edit" type="text"/></div>
+            <div class="modal-footer">
+                <button id="editDetermine" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

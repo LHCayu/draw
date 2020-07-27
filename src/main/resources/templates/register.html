@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#rs").click(function () {
+                $("input").val("");
+            })
+        })
+    </script>
+</head>
+<body>
+
+<!--注册表单-->
+<div class="page login-page">
+    <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+            <div class="row">
+                <!-- Logo & Information Panel-->
+                <div class="col-lg-5">
+                    <div class="info d-flex align-items-center">
+                        <div class="content">
+                            <div class="logo">
+                                <h1>欢迎注册</h1>
+                            </div>
+                            <p>抽奖</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form Panel    -->
+                <div class="col-lg-7 bg-white">
+                    <form id="rgt" method="post" action="/register" class="form d-flex align-items-center">
+                        <div class="content">
+                            <div class="form-group">
+                                <input id="username" class="input-material" type="text" name="username" placeholder="请输入用户名" >
+                            </div>
+                            <div class="form-group">
+                                <input id="password" class="input-material" type="password" name="password" placeholder="请输入密码"   >
+                            </div>
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="sex" id="male" value="男" checked>男&nbsp;&nbsp;&nbsp;&nbsp;
+                                </label>
+                            </span>
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="sex" id="female" value="女">女
+                                </label>
+                            </span>
+                            <div class="form-group">
+                                <input id="province" class="input-material" type="text" name="province" placeholder="请输入省份"   >                            </div>
+                            <div class="form-group">
+                                <input id="city" class="input-material" type="text" name="city" placeholder="请输入城市"   >
+                            </div>
+                            <div class="form-group">
+                                <input id="address" class="input-material" type="text" name="address" placeholder="请输入详细地址"   >
+                            </div>
+                            <span class="form-group">
+                                <button id="sb" type="submit" name="registerSubmit" class="btn btn-primary">注册</button>
+                            </span>
+                            <span class="form-group">
+                                <button id="rs" type="reset" name="registerSubmit" class="btn btn-primary">重置</button>
+                            </span>
+                            <p></p>
+                            <small>已有账号?</small><a href="/login" class="signup">&nbsp;登录</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

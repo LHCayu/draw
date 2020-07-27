@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // 点击上传弹出上传成功的弹出框
+            $("#checkSubmit").click(function () {
+                $("#hiddenButton2").click();
+            });
+
+
+            $("#checkUpload").click(function () {
+                window.location.href = "/checkWXOrder";
+            });
+
+        })
+    </script>
+</head>
+<body>
+<button class="f" id="hiddenButton2"  data-toggle="modal" data-target="#checkSuccess" hidden></button>
+<p></p>
+<div align="center">
+    <input type="file">
+    <button id="checkSubmit">上传</button>
+</div>
+
+
+<!--上传成功后的弹出框-->
+<div class="modal fade" id="checkSuccess">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogTitle">上传成功</h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div>
+                <p>
+                    我们会尽快审核您的消费凭证。若审核通过，红包将在<br>
+                    24小时通过微信服务通知窗口领取 ，逾期不领取将会<br>
+                    退回，并不予补偿实物江立将以填写的收货信息为准，<br>
+                    在 5个工作日内邮寄，请注意查收，如填写信息有误，<br>
+                    将不予补发<br>
+                </p>
+                <p>
+                    如有任何疑问，请致电客服热线：<br>
+                    400-XXXX-XXXX<br>
+                    工作时间：&nbsp;10:00-18:00（仅限工作日）
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="checkUpload" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn secondary"  data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
